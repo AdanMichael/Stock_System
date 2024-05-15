@@ -1,0 +1,33 @@
+环境： python 3.7     node-v14.19.1
+
+
+
+一、后端启动
+进入stock路径，
+安装依赖库，在终端输入命令：
+pip install -r requirements.txt -i https://pypi.mirrors.ustc.edu.cn/simple/
+运行app/run.py文件启动项目
+
+二、前端启动
+Teminal终端输入启动命令
+cd vue
+npm run serve
+
+
+三、浏览器打开
+http://localhost:8080/
+
+
+账号13500000000  密码admins
+
+
+预测算法 arima 评估指标mse  stock/venv/Lib/site-packages/statsmodels/tsa/tests/results  make_arma.py
+ma线
+数据来源 ig507
+
+
+INSERT INTO stock_exchange.tb_account
+(id, nickname, phone, password, `role`, create_time, rest_asset, profit_asset)
+VALUES(7, 'w', '12345678812', '123456', 'user', '1715407778000', NULL, NULL);
+
+演示用户管理时先增加再弄别的！！！！！！！！！！！！！！！！！！
