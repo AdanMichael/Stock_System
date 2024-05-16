@@ -351,3 +351,10 @@ def update():
         param = request_parse(request)
         res = StockService.update_stock_company_by_code(param)
         return resp(data=res)
+
+
+@stock_bp.route('/add-company', methods=['POST','GET'])
+def add():
+        param = request_parse(request)
+        res = StockService.add_stock_company_by_code(param)
+        return resp(data=res)

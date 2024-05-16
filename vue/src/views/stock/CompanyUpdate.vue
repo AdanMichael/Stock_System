@@ -519,13 +519,13 @@ export default {
 </script>
 
 <style scoped>
-#components-form-normal-register {
+#components-form-normal-cu {
   min-width: 450px;
   width: 600px;
   margin: 5rem auto;
 }
 
-#components-form-normal-register .register-form-button {
+#components-form-normal-cu .register-form-button {
   width: 100%;
 }
 </style>

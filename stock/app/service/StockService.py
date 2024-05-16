@@ -172,3 +172,19 @@ class StockService(object):
 
 
 
+    @classmethod
+    def add_stock_company_by_code(cls, param: []):
+        last_one=StockModel.query.filter()[-1]
+        lcode=str(int(last_one.code)+1)
+        company=StockModel(
+        code=lcode,
+        stockname=param.get('stockname'),jys=param.get('jys'),name=param.get('name'),
+        ename=param.get('ename'),market=param.get('market') ,idea=param.get('idea'),ldate=param.get('ldate'),
+        sprice=param.get('spricr'),principal=param.get('principal') ,rdate=param.get('rdate'),rprice=param.get('rprice') ,
+        instype=param.get('instype'),organ=param.get('organ'),phone=param.get('phone'),site=param.get('site'),
+          post=param.get('post') ,addr=param.get('addr'), oaddr=param.get('oaddr'),desc=param.get('desc')
+        )
+        res=db.session.add(company)
+        db.session.commit()
+        return res
+

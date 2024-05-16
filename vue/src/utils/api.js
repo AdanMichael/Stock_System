@@ -151,6 +151,12 @@ export const stock_api = {
     },
 
 
+    add_company(paramObj) {
+        return post('/stock/add-company', paramObj)
+    },
+
+
+
 
 }
 
@@ -215,7 +221,7 @@ export const user_api = {
         return get('/auth/delete-user',paramObj)
     },
 
- update(paramObj) {
+    update(paramObj) {
         return post('/auth/update', paramObj)
     },
 
