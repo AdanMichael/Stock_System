@@ -57,7 +57,10 @@ def sign_in():
         if register[0]:  # 数据是否合法
             account = repeat_register(param.get('phone'))
             if account[0]:  # 账户不存在
-                account = AccountModel(nickname=param.get('nickname'),
+                last_id=(AccountModel.query.filter()[-1]).id+1  ##########新加
+                account = AccountModel(
+                                      id=last_id,  ########## 新加
+                                       nickname=param.get('nickname'),
                                        phone=param.get('phone'),
                                        password=param.get('password'),
                                        role='user',
