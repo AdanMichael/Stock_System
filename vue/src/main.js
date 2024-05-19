@@ -43,10 +43,11 @@ import Alert from 'ant-design-vue/lib/alert';
 import Tree from 'ant-design-vue/lib/tree';
 import Cascader from 'ant-design-vue/lib/cascader';
 import TreeSelect from 'ant-design-vue/lib/tree-select';
-
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 import echarts from "echarts";
-
+Vue.use(ElementUI)
 // 组件注册
 Vue.component(Button.name, Button);
 Vue.component(Layout.name, Layout);

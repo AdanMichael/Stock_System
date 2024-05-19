@@ -59,14 +59,7 @@ const routes = [
   },
 
    //管理员路由
-   {
-    path: '/stock-manage',
-    name: 'StockManage',
-    component: () => import('../views/stock/StockManage.vue'),
-    meta: {
-      keepAlive: true // 需要缓存
-    }
-  },
+
   {
     path: '/company-manage',
     name: 'CompanyManage',

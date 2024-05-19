@@ -21,7 +21,7 @@ http://localhost:8080/
 账号13500000000  密码admins
 
 
-预测算法 arima 评估指标mse  stock/venv/Lib/site-packages/statsmodels/tsa/tests/results  make_arma.py
+预测算法 arima 评估指标mse  get_stock_hist_realtimedeal stockrouter
 ma线
 数据来源 ig507
 
@@ -31,3 +31,4 @@ INSERT INTO stock_exchange.tb_account
 VALUES(7, 'w', '12345678812', '123456', 'user', '1715407778000', NULL, NULL);
 
 演示用户管理时先增加再弄别的！！！！！！！！！！！！！！！！！！
+

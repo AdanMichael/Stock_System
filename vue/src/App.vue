@@ -1,7 +1,7 @@
 <template>
   <a-layout id="main-layout" class="layout">
     <a-layout-header>
-      <div class="logo">股票数据分析预测系统</div>
+      <div class="logo">股票可视化系统</div>
       <a-menu
         theme="dark"
         mode="horizontal"

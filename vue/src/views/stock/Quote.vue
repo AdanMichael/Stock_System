@@ -33,11 +33,25 @@
           </div>
         </a-spin>
       </a-tab-pane>
+
+
       <a-tab-pane key="Forecast" tab="股票预测">
         <a-spin :spinning="spinning" tip="加载中...">
           <div class="chart">
             <div id="ForecastChart"></div>
           </div>
+
+  <el-dropdown split-button type="primary" @click="handleClick" id="dropdown">
+     下拉菜单
+    <el-dropdown-menu slot="dropdown">
+      <el-dropdown-item>Action 1</el-dropdown-item>
+      <el-dropdown-item>Action 2</el-dropdown-item>
+      <el-dropdown-item>Action 3</el-dropdown-item>
+    </el-dropdown-menu>
+  </el-dropdown>
+
+
+
         </a-spin>
       </a-tab-pane>
     </a-tabs>
@@ -52,6 +66,7 @@ var downColor = "#00da3c";
 var downBorderColor = "#008F28";
 
 export default {
+
   name: "Quote",
   data() {
     return {
@@ -112,6 +127,7 @@ export default {
           } else if (level == "Month") {
             this.kline_data.month = this.splitKlineData(res.data);
           } else if (level == "Forecast") {
+             // ###############################################################################
              this.kline_data.forecast = await this.splitKlineData1(JSON.parse(res.data));
              this.drawForecastChart();
              this.spinning = false;
@@ -161,14 +177,14 @@ export default {
           values.push(origin[item].val)
           categoryData1.push(pred[item].date);
           values1.push(pred[item].val)
-        } 
-     
-      
+        }
       return {
         categoryData: {'origin':categoryData,'pred':categoryData1},
         values: {'origin':values,'pred':values1},
       };
     },
+
+
     calculateMA(dayCount, level) {
       // MA线计算
       let data = [];
@@ -503,19 +519,37 @@ export default {
         legend: {
           data: ['实际', '预测']
        },
+
         xAxis: {
-          type: "category",
-          splitLine: {
-            show: true,
-          },
-          data: this.kline_data.forecast.categoryData.origin,
-        },
-        yAxis: {
+
           type: "value",
           axisPointer: {
             snap: true,
           },
         },
+
+
+        yAxis: [
+          {
+            name:"实际",
+            type: "category",
+            splitLine: {
+            show: true,
+          },
+          data: this.kline_data.forecast.categoryData.origin,
+          },
+           {name:"预测",
+            type: "category",
+            splitLine: {
+            show: true,
+          },
+          data: this.kline_data.forecast.categoryData.pred,
+          },
+            ],
+
+
+
+
         series: [
           {
             name: "实际",
@@ -525,7 +559,7 @@ export default {
             data: this.kline_data.forecast.values.origin,
           },
            {
-          name: "预测",
+            name: "预测",
             type: "line",
             showSymbol: true,
             hoverAnimation: true,
@@ -564,5 +598,8 @@ export default {
   min-width: 800px;
   width: 1200px;
   height: 550px;
+}
+#dropdown{
+  position:absolute; top:0; right:0;
 }
 </style>

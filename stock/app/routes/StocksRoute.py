@@ -1,6 +1,7 @@
 # coding:utf-8
 # 股票详细信息路由
 import json
+from datetime import timedelta
 
 import pandas
 import pandas as pd
@@ -217,7 +218,7 @@ def get_stock_realtimedeal(code, level):
         return resp(ResponseEnum.OUTER_INTERFACE_EXCEPTION.value['code'],
                     ResponseEnum.OUTER_INTERFACE_EXCEPTION.value['msg'])
 
-
+############################################################机器学习！！！！！！！！！！！！！！！！
 @stock_bp.route('/hist/timedeal/<string:code>/<string:level>', methods=['GET'])
 def get_stock_hist_realtimedeal(code, level):
     """
@@ -226,41 +227,58 @@ def get_stock_hist_realtimedeal(code, level):
     :param level: 分时级别
     :return:
     """
+    #   pandas dropna:丢弃空值 ，numpy mean：取平均值 ， pandas resample:重采样
+    # [a:b]表示切片  list[start_index:end_index:step]
+    # start_index:表示起始索引
+    # end_index:表示结束索引（不包含该索引对应的值）
     try:
         if level in ['5', '15', '30', '60', 'Day', 'Week', 'Month', 'Year']:
             return resp(data=StockApi.get_stock_hist_realtimedeal(code, level))
         elif level == 'Forecast':
-            data = pandas.DataFrame(StockApi.get_stock_hist_realtimedeal(code, 'Day'))
-            data.to_csv('./data/Day.csv', index=False)
-            data = pd.read_csv('./data/Day.csv', index_col=0, parse_dates=[0])
-            stock_week = data['o'].resample('W').mean().dropna()
-            stock_train = stock_week['2000':'2020'].dropna()
-            stock_data = stock_week['2021':'2022'].dropna()
+            data1 = pandas.DataFrame(StockApi.get_stock_hist_realtimedeal(code, 'Day'))
+            #获取最后一个时间序列并去掉内部-，即2024-05-17 ——> 20240517 str类型
+            # time=(data1['d'].iloc[-1]).replace('-', '')
+            data1.to_csv('./data/Day.csv', index=False)
+            #从2000到2024
+            data = pd.read_csv('./data/Day.csv', index_col=0, parse_dates=[0],skiprows=range(1,2170),usecols=["d","c"])
+            for_index = pd.read_csv('./data/Day.csv',  parse_dates=[0],skiprows=range(1,2170),usecols=["d","c"])
+            # stock_week = data['c'].resample('W').mean().dropna()
+            # stock_train = stock_week['2000':'2020'].dropna()
+            # stock_data = stock_week['2021':'2022'].dropna()
             # print(stock_train)
-            model = ARIMA(stock_train, order=(2, 0, 1))      #ARIMA算法模型
+            end = (for_index.tail(1).index.tolist())[0]
+            stock_data = data['c'].dropna()
+            #######
+            new = data.index + timedelta(days=1)
+            stock_train = data.set_index(new)
+            ########
+            model = ARIMA(stock_train ['c'].dropna(), order=(2, 1, 4))      #ARIMA算法模型
             re = model.fit()
-            pred = re.predict(1045, 1500, dynamic=True)      #预测
-            print(pred)
+            pred = re.predict(end-7,end, dynamic=True)      #预测
+            # print(pred)
+            ###################################################
             list1 = []
             list2 = []
-            i = 1045
-            for item in stock_data.index:
-                print(str(item))
+            j=0
+            for item in stock_data.index[end-7:end+1]:
+                # print(str(item))
                 tmp1 = {"date": str(item)[0:10], "val": format(stock_data[str(item)], '.2f')}
-                tmp2 = {"date": str(item)[0:10], "val": format(pred[i], '.2f')}
-                i = i+1
-                list2.append(tmp2)
+                j = j+1
                 list1.append(tmp1)
-            json_week = json.dumps(list1)
+            ########################################################
+            i=0
+            for item in stock_train.index[end-7:end+1]:
+                # print(str(item))
+                tmp2 = {"date": str(item)[0:10], "val": format(pred[i], '.2f')}
+                i=i+1
+                list2.append(tmp2)
+     ##############################################
+            json_origin = json.dumps(list1)
             json_pred = json.dumps(list2)
-            # print(pred)
-            # plt.figure(figsize=(10, 10))
-            # plt.plot(pred)
-            # plt.plot(stock_week.values)
-            # plt.show()
             print(list1)
             print(list2)
-            obj = {'origin': json_week, 'pred': json_pred}
+            obj = {'origin': json_origin, 'pred': json_pred}
+
             return resp(data=json.dumps(obj))
         else:
             return resp(ResponseEnum.STOCK_LEVEL_INVALID.value['code'],
