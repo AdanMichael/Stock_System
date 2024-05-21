@@ -1,6 +1,6 @@
 <template>
   <div>
-     股票数据可视化系统
+     Stock Data Visualization System
   </div>
 </template>
 
@@ -10,3 +10,4 @@ export default {
     name: "Footer"
 }
 </script>
+

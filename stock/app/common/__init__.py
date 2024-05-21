@@ -24,6 +24,8 @@ def alipay_obj():
         # config=AliPayConfig(timeout=50)  # 可选，请求超时时间
     )
     return alipay
+
+
 if __name__ == '__main__':
     ap=alipay_obj()
     # 电脑网站支付，需要跳转到：https://openapi.alipay.com/gateway.do? + order_string

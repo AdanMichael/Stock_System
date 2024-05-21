@@ -1,15 +1,15 @@
 <template>
   <a-layout id="main-layout" class="layout">
     <a-layout-header>
-      <div class="logo">股票可视化系统</div>
+      <div class="logo">股票数据可视化系统</div>
       <a-menu
         theme="dark"
         mode="horizontal"
         :default-selected-keys="current"
-        :style="{ lineHeight: '64px' }"
+        :style="{ lineHeight: '65px' }"
       >
         <!-- 普通用户路由 -->
-        <a-menu-item key="/" v-if="user_info.role == 'user'">
+        <a-menu-item key="/" v-if="user_info.role == 'user'" >
           <router-link to="/">首页</router-link>
         </a-menu-item>
         <a-menu-item key="/stock-list" v-if="user_info.role == 'user'">
@@ -25,15 +25,16 @@
 
          <!-- 管理员用户路由 -->
 
-        <a-menu-item key="/stock-manage" v-if="user_info.role == 'admin'">
-          <router-link to="/stock-manage">股票信息管理</router-link>
-        </a-menu-item>
         <a-menu-item key="/company-manage" v-if="user_info.role == 'admin'">
           <router-link to="/company-manage">股票公司信息管理</router-link>
         </a-menu-item>
         <a-menu-item key="/user-manage" v-if="user_info.role == 'admin'">
           <router-link to="/user-manage">用户信息管理</router-link>
         </a-menu-item>
+        <a-menu-item key="/user-money" v-if="user_info.role == 'admin'">
+          <router-link to="/user-money">用户资产管理</router-link>
+        </a-menu-item>
+
 
         <!-- 公共信息 -->
         <a-sub-menu v-if="showLR" title="个人中心">
@@ -55,8 +56,10 @@
         </a-sub-menu>
       </a-menu>
     </a-layout-header>
-    <a-layout-content style="padding: 30px 50px 0px">
-      <div :style="{ background: '#fff', padding: '24px', minHeight: '640px' }">
+
+    <a-layout-content style="padding: 30px 50px 0px" >
+<!--      <div :style="{ background: '#fff', padding: '24px', minHeight: '640px' }">-->
+      <div :style="{ background: '#fff', padding: '24px', minHeight: '640px' ,opacity:0.75}">
 
         <!-- 页面缓存，进入这个页面不再刷新 -->
         <keep-alive>
@@ -65,9 +68,12 @@
         <router-view  v-if="!$route.meta.keepAlive" :user_info="user_info" />
       </div>
     </a-layout-content>
-    <a-layout-footer style="text-align: center">
+
+    <a-layout-footer style="text-align: center" >
       <Footer />
     </a-layout-footer>
+
+
   </a-layout>
 </template>
 
@@ -157,4 +163,19 @@ export default {
   /* margin: 16px 24px 16px 0; */
   float: left;
 }
+
+#main-layout{
+  background:url("assets/bg.jpg");
+  width:100%;
+  height:100%;
+  position:fixed;
+  background-size:100% 100%;
+}
+
+
+
+
+
+
+
 </style>

@@ -94,6 +94,11 @@ const routes = [
     component: () => import('../views/stock/CompanyUpdate.vue'),
   },
 
+          {
+    path: '/user-money',
+    name: 'UserMoney',
+    component: () => import('../views/auth/UserMoney.vue'),
+  },
 
 
 ]
