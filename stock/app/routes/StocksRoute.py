@@ -2,13 +2,10 @@
 # 股票详细信息路由
 import json
 from datetime import timedelta
-
 import pandas
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+import statsmodels.api as sm
 from statsmodels.tsa.arima.model import ARIMA
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 from flask import Blueprint, request
@@ -221,12 +218,12 @@ def get_stock_realtimedeal(code, level):
 ############################################################机器学习！！！！！！！！！！！！！！！！
 @stock_bp.route('/hist/timedeal/<string:code>/<string:level>', methods=['GET'])
 def get_stock_hist_realtimedeal(code, level):
-    """
-    历史分时数据接口
-    :param code: 股票代码
-    :param level: 分时级别
-    :return:
-    """
+    # """
+    # 历史分时数据接口
+    # :param code: 股票代码
+    # :param level: 分时级别
+    # :return:
+    # """
     #   pandas dropna:丢弃空值 ，numpy mean：取平均值 ， pandas resample:重采样
     # [a:b]表示切片  list[start_index:end_index:step]
     # start_index:表示起始索引
@@ -235,24 +232,37 @@ def get_stock_hist_realtimedeal(code, level):
         if level in ['5', '15', '30', '60', 'Day', 'Week', 'Month', 'Year']:
             return resp(data=StockApi.get_stock_hist_realtimedeal(code, level))
         elif level == 'Forecast':
+            param=request_parse(request)
+            cmd=param.get('cmd')
             data1 = pandas.DataFrame(StockApi.get_stock_hist_realtimedeal(code, 'Day'))
             #获取最后一个时间序列并去掉内部-，即2024-05-17 ——> 20240517 str类型
             # time=(data1['d'].iloc[-1]).replace('-', '')
             data1.to_csv('./data/Day.csv', index=False)
             #从2000到2024
-            data = pd.read_csv('./data/Day.csv', index_col=0, parse_dates=[0],skiprows=range(1,2170),usecols=["d","c"])
-            for_index = pd.read_csv('./data/Day.csv',  parse_dates=[0],skiprows=range(1,2170),usecols=["d","c"])
+            data = pd.read_csv('./data/Day.csv', index_col=0, parse_dates=[0],skiprows=range(1,2170))
+            for_index = pd.read_csv('./data/Day.csv',  parse_dates=[0],skiprows=range(1,2170))
             # stock_week = data['c'].resample('W').mean().dropna()
             # stock_train = stock_week['2000':'2020'].dropna()
             # stock_data = stock_week['2021':'2022'].dropna()
             # print(stock_train)
             end = (for_index.tail(1).index.tolist())[0]
-            stock_data = data['c'].dropna()
+            # stock_data = data['c'].dropna()
+            stock_data = data[cmd].dropna()
             #######
             new = data.index + timedelta(days=1)
             stock_train = data.set_index(new)
             ########
-            model = ARIMA(stock_train ['c'].dropna(), order=(2, 1, 4))      #ARIMA算法模型
+            # 确定模型参数d
+            # stock_diff1 = stock_train.diff(1)[cmd].dropna()
+            # 使用aic 准则法   确定p和q的值
+            # res = sm.tsa.arma_order_select_ic(stock_diff1, max_ar=5, max_ma=5, ic=['aic'])
+            # p=int(res.aic_min_order[0])
+            # q=int(res.aic_min_order[1])
+            # print(res.aic_min_order)
+            # print(p)
+            # print(q)
+            model = ARIMA(stock_train [cmd].dropna(), order=(2, 1, 4))      #ARIMA算法模型
+            # model = ARIMA(stock_train [cmd].dropna(), order=(p, 1, q))      #ARIMA算法模型
             re = model.fit()
             pred = re.predict(end-7,end, dynamic=True)      #预测
             # print(pred)
@@ -278,7 +288,6 @@ def get_stock_hist_realtimedeal(code, level):
             print(list1)
             print(list2)
             obj = {'origin': json_origin, 'pred': json_pred}
-
             return resp(data=json.dumps(obj))
         else:
             return resp(ResponseEnum.STOCK_LEVEL_INVALID.value['code'],

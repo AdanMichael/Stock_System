@@ -41,14 +41,21 @@
             <div id="ForecastChart"></div>
           </div>
 
-  <el-dropdown split-button type="primary" @click="handleClick" id="dropdown">
-     下拉菜单
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item>Action 1</el-dropdown-item>
-      <el-dropdown-item>Action 2</el-dropdown-item>
-      <el-dropdown-item>Action 3</el-dropdown-item>
-    </el-dropdown-menu>
-  </el-dropdown>
+
+<el-dropdown @command="handleCommand" id="dp">
+  <span class="el-dropdown-link">
+    选择预测的类型<i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item command="c" >收盘价</el-dropdown-item>
+    <el-dropdown-item command="o">开盘价</el-dropdown-item>
+    <el-dropdown-item command="h">最高价</el-dropdown-item>
+    <el-dropdown-item command="l">最低价</el-dropdown-item>
+    <el-dropdown-item command="zf" >振幅</el-dropdown-item>
+    <el-dropdown-item command="hs" >换手率</el-dropdown-item>
+    <el-dropdown-item command="zd" >涨跌幅</el-dropdown-item>
+  </el-dropdown-menu>
+</el-dropdown>
 
 
 
@@ -85,7 +92,9 @@ export default {
         price: [],
       },
       isRisk: false,  // 是否为风险股票
-      isRiskDesc: ''
+      isRiskDesc: '',
+      cm:'c'
+
     };
   },
   mounted() {
@@ -98,7 +107,7 @@ export default {
       if (key === "1") {
         this.getDayData(this.code);
       } else {
-        this.getHistKlineData(key, this.code);
+        this.getHistKlineData(key, this.code,this.cm);
       }
     },
     getStock(code) {
@@ -115,10 +124,13 @@ export default {
     // ==============
     // k线历史数据图形建模
     // ==============
-  getHistKlineData(level, code) {
+  getHistKlineData(level, code,cm) {
+      var param={
+        cmd:cm
+      }
       this.spinning = true;
       console.log(this.code)
-      this.$stock_api.get_stock_hist_realtimedeal(code, level).then(async (res) => {
+      this.$stock_api.get_stock_hist_realtimedeal(code, level,param).then(async (res) => {
         if (res.code == 200) {
           if (level == "Day") {
             this.kline_data.day = this.splitKlineData(res.data);
@@ -580,6 +592,15 @@ export default {
       ForecastChart.setOption(option);
     },
 
+
+     handleCommand(command) {
+        this.cm=command;
+        this.callback('Forecast')
+      }
+
+
+
+
   },
 };
 </script>
@@ -599,7 +620,17 @@ export default {
   width: 1200px;
   height: 550px;
 }
-#dropdown{
+
+#dp{
   position:absolute; top:0; right:0;
 }
+.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+    font-size: large;
+  }
+.el-icon-arrow-down {
+    font-size: 15px;
+  }
+
 </style>

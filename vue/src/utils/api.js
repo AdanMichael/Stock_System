@@ -136,9 +136,12 @@ export const stock_api = {
      * 参数：paramObj/null
      * 方式：get
      */
-    get_stock_hist_realtimedeal(code, level) {
-        return get('/stock/hist/timedeal/' + code + '/' + level)
+    get_stock_hist_realtimedeal(code, level,param) {
+        return get('/stock/hist/timedeal/' + code + '/' + level,param)
     },
+
+
+
 
     //删除
        delete_stock(paramObj) {
