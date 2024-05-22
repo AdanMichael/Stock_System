@@ -1,5 +1,5 @@
 <template>
-  <a-layout id="main-layout" class="layout">
+  <a-layout id="main-layout" class="layout" >
     <a-layout-header>
       <div class="logo">股票数据可视化系统</div>
       <a-menu

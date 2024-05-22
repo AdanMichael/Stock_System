@@ -9,10 +9,10 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import('../views/auth/Home.vue'),
-    meta: {
-      showfoot:true,
-      showcontent:true
-    }
+    // meta: {
+    //   showfoot:true,
+    //   showcontent:true
+    // }
   },
   {
     path: '/login',
