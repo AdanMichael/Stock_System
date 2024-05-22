@@ -9,11 +9,18 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import('../views/auth/Home.vue'),
+    meta: {
+      showfoot:true,
+      showcontent:true
+    }
   },
   {
     path: '/login',
     name: 'Login',
     component: () => import('../views/auth/Login.vue'),
+    // meta: {
+    //   show:true
+    // }
   },
   {
     path: '/register',

@@ -57,7 +57,7 @@
       </a-menu>
     </a-layout-header>
 
-    <a-layout-content style="padding: 30px 50px 0px" >
+    <a-layout-content style="padding: 30px 50px 0px"  v-if="!$route.meta.showcontent">
 <!--      <div :style="{ background: '#fff', padding: '24px', minHeight: '640px' }">-->
       <div :style="{ background: '#fff', padding: '24px', minHeight: '640px' ,opacity:0.75}">
 
@@ -69,7 +69,7 @@
       </div>
     </a-layout-content>
 
-    <a-layout-footer style="text-align: center" >
+    <a-layout-footer style="text-align: center" v-if="!$route.meta.showfoot">
       <Footer />
     </a-layout-footer>
 
@@ -171,11 +171,6 @@ export default {
   position:fixed;
   background-size:100% 100%;
 }
-
-
-
-
-
 
 
 </style>
