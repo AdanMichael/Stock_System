@@ -1,9 +1,7 @@
 # coding:utf-8
 # 用于用户购买的股票
-
 from . import db
 from models import StocksModel , AccountModel
-
 
 class AccountStockModel(db.Model):
     # 股票与用户多对多关系
