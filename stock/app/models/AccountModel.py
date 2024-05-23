@@ -26,7 +26,7 @@ class AccountModel(db.Model):
             'role': self.role,
             'create_time': self.create_time,
             'rest_asset':self.rest_asset,
-            'profit_asset':self.profit_asset,
+            'profit_asset':self.profit_asset
         }
 
 

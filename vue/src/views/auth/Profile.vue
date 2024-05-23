@@ -64,7 +64,7 @@ export default {
         date1: formatDate(this.user_info.create_time),
         password: this.user_info.password,
         role: this.formatRole(this.user_info.role),
-        restAsset: this.formatRestAsset(this.user_info.restAsset),
+        restAsset: this.formatRestAsset(this.user_info.rest_asset),
       },
     };
   },
