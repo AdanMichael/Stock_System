@@ -16,10 +16,13 @@
           <router-link to="/stock-list">股票详情</router-link>
         </a-menu-item>
         <a-menu-item key="/stock-note" v-if="user_info.role == 'user'">
-          <router-link to="/stock-note">股市风向标</router-link>
+          <router-link to="/stock-note">股市风向</router-link>
         </a-menu-item>
         <a-menu-item key="/stock-tiger" v-if="user_info.role == 'user'">
           <router-link to="/stock-tiger">股票波动</router-link>
+        </a-menu-item>
+        <a-menu-item key="/mystock" v-if="user_info.role == 'user'">
+          <router-link to="/mystock">我的股票</router-link>
         </a-menu-item>
 
 

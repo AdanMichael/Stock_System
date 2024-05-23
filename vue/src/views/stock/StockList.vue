@@ -70,8 +70,25 @@
           style="margin-right: 2rem"
           >实时数据</a-button
         >
+
+        <a-button
+          type="primary"
+          @click="showBuy=true,sendinfo(row.dm,row.mc)"
+          style="margin-right: 2rem"
+          >买入</a-button
+        >
       </template>
     </a-table>
+
+    <el-dialog :visible.sync="showBuy" width=20%>
+      <el-form label-width="100px" >
+        <el-form-item label="股数：">
+          <el-input v-model="input" style="width:50%" clearable placeholder="请输入数字"></el-input>
+          <el-button type="primary" @click="pay">支付</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
 
     <!-- 抽屉，用于展示股票的实时数据 -->
     <a-drawer
@@ -133,6 +150,8 @@ export default {
   },
   data() {
     return {
+      input:'',
+      showBuy:false,
       loading: false,
       searchLoading: false,
       data: [],
@@ -164,6 +183,16 @@ export default {
     this.loadStockData(param)
   },
   methods: {
+
+      sendinfo(dm,mc){
+        this.code=dm
+        this.stockname=mc
+      },
+      pay(){
+
+
+      },
+
 
     // ======================
     // 请求后端股票数据接口

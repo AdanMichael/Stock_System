@@ -1,13 +1,16 @@
 # coding:utf-8
 # 认证（登录/注册）路由
+import decimal
 
 from flask import Blueprint, request, session
 from models.AccountModel import AccountModel  # 账户模型
 from service.UserService import UserService
 from models import db
 from common.Utils import create_token, login_required, resp, \
-    valid_login, valid_register, verify_token, pagination, request_parse, ResponseEnum
+    valid_login, valid_register, verify_token, pagination, request_parse, ResponseEnum,alipay_obj
 import time
+from alipay import AliPay
+
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -168,6 +171,35 @@ def update():
             return resp(user[1].value['code'], user[1].value['msg'])
 
 
+@auth_bp.route('/recharge', methods=['GET'])
+def recharge():
+    param = request_parse(request)
+    money=param.get('money')
+    now_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    ap=alipay_obj()
+    url = ap.api_alipay_trade_page_pay(
+        out_trade_no=now_time,
+        total_amount=money,
+        subject="充值订单",
+        return_url='http://127.0.0.1:8080/#/profile',
+        notify_url='http://127.0.0.1:8080/#/profile'
+    )
+    res = 'https://openapi-sandbox.dl.alipaydev.com/gateway.do?' + url
+    return resp(data=res)
+
+
+@auth_bp.route('/addasset', methods=['GET'])
+def addasset():
+    param = request_parse(request)
+    money=decimal.Decimal(param.get('money'))
+    id=param.get('id')
+    user= db.session.query(AccountModel).filter(AccountModel.id == id).first()
+    user.rest_asset+=money
+    res=db.session.commit()
+    return resp(res)
+
+
+
 ############################################
 # 辅助函数
 ############################################
@@ -181,3 +213,4 @@ def repeat_register(phone: str):
         return True, ''
     else:
         return False, ''
+

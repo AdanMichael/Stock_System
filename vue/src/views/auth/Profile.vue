@@ -17,19 +17,34 @@
       <a-form-model-item label="账号（手机）">
         {{ form.phone }}
       </a-form-model-item>
-<!--      <a-form-model-item label="用户资产">-->
-<!--        {{ form.restAsset }} ￥-->
-<!--      </a-form-model-item>-->
+      <a-form-model-item label="用户资产">
+        {{ form.restAsset }} ￥
+        <el-button
+          type="primary"
+          @click="showBuy=true"
+          style="margin-right: 2rem"
+          >充值</el-button
+        >
+      </a-form-model-item>
+
       <a-form-model-item label="身份权限">
         {{ form.role }}
       </a-form-model-item>
     </a-form-model>
+
+       <el-dialog :visible.sync="showBuy" width=20%>
+      <el-form label-width="100px" >
+        <el-form-item label="充值金额：">
+          <el-input v-model="input" style="width:50%" clearable placeholder="请输入"></el-input>
+          <el-button type="primary" @click="pay">支付</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { formatDate } from '../../utils/common.js'
-
 export default {
   name: "Profile",
   props: {
@@ -39,6 +54,8 @@ export default {
   },
   data() {
     return {
+      input:'',
+      showBuy:false,
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
       form: {
@@ -54,6 +71,27 @@ export default {
   mounted() {
   },
   methods: {
+      pay(){
+       var param = {
+        money: this.input,
+        id: this.user_info.id
+      }
+        this.$alipay_api.recharge(param).then((res) => {
+          if (res.code==200){
+            this.$alipay_api.addasset(param).then((res) => {
+                  if (res.code==200){
+                    console.log(res)
+                    this.$message.success("充值成功！")
+                  }
+              })
+            window.location.assign(res.data)
+          }
+      })
+
+
+      },
+
+
       /**
        * 字段转换用户角色名称
        */

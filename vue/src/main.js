@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './routes'
 
 // api接口
-import { stock_api, user_api } from './utils/api.js'
+import {alipay_api, stock_api, user_api} from './utils/api.js'
 
 // ant-design-vue组件
 import 'ant-design-vue/dist/antd.css';
@@ -123,6 +123,7 @@ Vue.prototype.$confirm = Modal.confirm;
 //定义全局变量
 Vue.prototype.$stock_api = stock_api;
 Vue.prototype.$user_api = user_api;
+Vue.prototype.$alipay_api = alipay_api;
 // Vue.prototype.$risk_stock = risk_stock;
 // Vue.prototype.$order_api = order_api;
 Vue.prototype.$echarts = echarts;

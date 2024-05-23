@@ -14,6 +14,8 @@ class AccountModel(db.Model):
     password = db.Column(db.String(255), doc="密码", nullable=True)
     role = db.Column(db.String(5), doc="账户角色", nullable=True)
     create_time = db.Column(db.String(13), doc="注册时间", nullable=True)
+    rest_asset=db.Column(db.DECIMAL(10,2), doc="用户资产", nullable=True)
+    profit_asset=db.Column(db.DECIMAL(10,2), doc="获利资产", nullable=True)
 
     def to_json(self):
         return {
@@ -22,7 +24,9 @@ class AccountModel(db.Model):
             'phone': self.phone,
             'password': self.password,
             'role': self.role,
-            'create_time': self.create_time
+            'create_time': self.create_time,
+            'rest_asset':self.rest_asset,
+            'profit_asset':self.profit_asset,
         }
 
 

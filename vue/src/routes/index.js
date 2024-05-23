@@ -64,6 +64,11 @@ const routes = [
     //   keepAlive: true // 需要缓存
     // }
   },
+ {
+    path: '/mystock',
+    name: 'MyStock',
+    component: () => import('../views/auth/MyStock.vue'),
+  },
 
    //管理员路由
 

@@ -230,7 +230,17 @@ export const user_api = {
 
 }
 
+//支付接口
+export const alipay_api={
+ //    充值
+ recharge(paramObj) {
+        return get('/auth/recharge',paramObj)
+    },
 
+ addasset(paramObj) {
+        return get('/auth/addasset',paramObj)
+    },
+}
 
 
 
