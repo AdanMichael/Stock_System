@@ -81,7 +81,6 @@ export default {
             this.$alipay_api.addasset(param).then((res) => {
                   if (res.code==200){
                     console.log(res)
-                    this.$message.success("充值成功！")
                   }
               })
             window.location.assign(res.data)

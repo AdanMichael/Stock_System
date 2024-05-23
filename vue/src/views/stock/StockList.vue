@@ -84,7 +84,7 @@
       <el-form label-width="100px" >
         <el-form-item label="股数：">
           <el-input v-model="input" style="width:50%" clearable placeholder="请输入数字"></el-input>
-          <el-button type="primary" @click="pay">支付</el-button>
+          <el-button type="primary" @click="pay">下单</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>

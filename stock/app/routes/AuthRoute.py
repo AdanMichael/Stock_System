@@ -4,6 +4,7 @@ import decimal
 
 from flask import Blueprint, request, session
 from models.AccountModel import AccountModel  # 账户模型
+from models.AccountStockModel import AccountStockModel  #购入股票模型
 from service.UserService import UserService
 from models import db
 from common.Utils import create_token, login_required, resp, \
