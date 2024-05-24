@@ -19,12 +19,21 @@
       </a-form-model-item>
       <a-form-model-item label="用户资产">
         {{ form.restAsset }} ￥
+         <el-button
+          type="primary"
+          @click="refresh"
+          style="margin-right: 2rem"
+          >刷新</el-button
+        >
         <el-button
           type="primary"
           @click="showBuy=true"
           style="margin-right: 2rem"
           >充值</el-button
         >
+
+
+
       </a-form-model-item>
 
       <a-form-model-item label="身份权限">
@@ -40,6 +49,7 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
   </div>
 </template>
 
@@ -86,8 +96,10 @@ export default {
             window.location.assign(res.data)
           }
       })
+      },
 
-
+      refresh(){
+        this.$router.go(0)
       },
 
 

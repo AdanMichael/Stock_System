@@ -240,7 +240,18 @@ export const alipay_api={
  addasset(paramObj) {
         return get('/auth/addasset',paramObj)
     },
+
+ buystock(paramObj) {
+        return get('/auth/buystock',paramObj)
+    },
+
+
+
+
+
 }
+
+
 
 
 

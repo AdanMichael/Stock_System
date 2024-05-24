@@ -199,7 +199,24 @@ def addasset():
     res=db.session.commit()
     return resp(res)
 
-
+@auth_bp.route('/buystock', methods=['GET'])
+def buystock():
+    param = request_parse(request)
+    buy_price=decimal.Decimal(param.get('buy_price'))
+    account_id=param.get('account_id')
+    code_id=param.get('code_id')
+    stocknum=decimal.Decimal(param.get('stocknum'))
+    stockname=param.get('stockname')
+    buy_time=param.get('buy_time')
+    user = db.session.query(AccountModel).filter(AccountModel.id == account_id).first()
+    if user.rest_asset>=(stocknum*buy_price):
+        new=AccountStockModel(stockname=stockname,buy_price=buy_price,account_id=account_id,code_id=code_id,stocknum=stocknum,buy_time=buy_time)
+        res=db.session.add(new)
+        user.rest_asset -= stocknum*buy_price
+        db.session.commit()
+        return resp()
+    else:
+        return resp(ResponseEnum.NoMoney_ERROR.value['code'], ResponseEnum.NoMoney_ERROR.value['msg'])
 
 ############################################
 # 辅助函数

@@ -84,7 +84,7 @@
       <el-form label-width="100px" >
         <el-form-item label="股数：">
           <el-input v-model="input" style="width:50%" clearable placeholder="请输入数字"></el-input>
-          <el-button type="primary" @click="pay">下单</el-button>
+          <el-button type="primary" @click="pay">支付</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -150,6 +150,7 @@ export default {
   },
   data() {
     return {
+      real_data: {},
       input:'',
       showBuy:false,
       loading: false,
@@ -188,7 +189,38 @@ export default {
         this.code=dm
         this.stockname=mc
       },
+
       pay(){
+        if (this.input==''){
+            this.$message.warning("购入数量不能为空")
+        }
+        else if(this.input=='0'){
+          this.$message.warning("购入数量不能为0")
+        }
+        else {
+          this.$stock_api.get_stock_day(this.code).then((res) => {
+                if (res.code ==200) {
+                    this.real_data = res.data
+                    var param = {
+                      code_id:this.code ,
+                      account_id:this.user_info.id,
+                      stockname:this.stockname,
+                      stocknum:this.input,
+                      buy_price:this.real_data.p,
+                      buy_time:this.real_data.t
+                      }
+                this.$alipay_api.buystock(param).then((res) => {
+                if (res.code == 200) {
+                    this.$message.success('已购入！');
+                    this.showBuy=false
+                   }
+                else if (res.code==1020){
+                    this.$message.error("资金不足")
+                }
+                })
+                }
+            })
+        }
 
 
       },
