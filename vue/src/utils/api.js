@@ -255,20 +255,17 @@ get_stocks(paramObj){
 },
 
 
-     add_stock(paramObj) {
-        return post('/auth/add-stock', paramObj)
-    },
      del_stock(paramObj) {
-        return post('/auth/del-stock', paramObj)
+        return get('/auth/del-stock', paramObj)
     },
      update_stock(paramObj) {
-        return post('/auth/update-stock', paramObj)
+        return get('/auth/update-stock', paramObj)
     },
      q_one(paramObj) {
-        return post('/auth/q-one', paramObj)
+        return get('/auth/q-one', paramObj)
     },
      q_all() {
-        return post('/auth/q-all')
+        return get('/auth/q-all')
     },
 
 

@@ -134,7 +134,7 @@ def get_users():
 
 
 
-@auth_bp.route('/userbyname', methods=['GET'])
+@auth_bp.route('/userbyname', methods=['POST','GET'])
 def get_userbyname():
         param = request_parse(request)
         name= param.get('nickname')
@@ -144,7 +144,7 @@ def get_userbyname():
 
 
 
-@auth_bp.route('/delete-user', methods=['GET'])
+@auth_bp.route('/delete-user', methods=['POST','GET'])
 def delete_user():
         param = request_parse(request)
         res =db.session.query(AccountModel).filter(AccountModel.id == param.get('id')).delete()
@@ -182,7 +182,7 @@ def update_user():
             return resp(user[1].value['code'], user[1].value['msg'])
 
 
-@auth_bp.route('/recharge', methods=['GET'])
+@auth_bp.route('/recharge', methods=['GET','POST'])
 def recharge():
     param = request_parse(request)
     money=param.get('money')
@@ -199,7 +199,7 @@ def recharge():
     return resp(data=res)
 
 
-@auth_bp.route('/addasset', methods=['GET'])
+@auth_bp.route('/addasset', methods=['GET','POST'])
 def addasset():
     param = request_parse(request)
     money=decimal.Decimal(param.get('money'))
@@ -209,7 +209,7 @@ def addasset():
     res=db.session.commit()
     return resp(res)
 
-@auth_bp.route('/buystock', methods=['GET'])
+@auth_bp.route('/buystock', methods=['GET','POST'])
 def buystock():
     param = request_parse(request)
     buy_price=decimal.Decimal(param.get('buy_price'))
@@ -231,7 +231,7 @@ def buystock():
 
 
 
-@auth_bp.route('/get-stock', methods=['GET'])
+@auth_bp.route('/get-stock', methods=['GET','POST'])
 def get_stock():
     try:
         param = request_parse(request)
@@ -245,7 +245,7 @@ def get_stock():
 
 
 
-@auth_bp.route('/get-stocks', methods=['GET'])
+@auth_bp.route('/get-stocks', methods=['GET','POST'])
 def get_stocks():
     try:
         param = request_parse(request)
@@ -259,7 +259,7 @@ def get_stocks():
 
 
 
-@auth_bp.route('/q-all', methods=['POST'])
+@auth_bp.route('/q-all', methods=['POST','GET'])
 def q_all():
     try:
         data = UserService.q_all()
@@ -280,6 +280,31 @@ def q_one():
     except Exception as e:
         print('分页查询用户列表异常 ' + str(e))
         return resp(ResponseEnum.QUERY_DATABASE_FAIL.value['code'], ResponseEnum.QUERY_DATABASE_FAIL.value['msg'])
+
+
+@auth_bp.route('/del-stock', methods=['GET','POST'])
+def del_stock():
+        param = request_parse(request)
+        index = param.get('index')
+        res = db.session.query(AccountStockModel).filter(AccountStockModel.index == index).delete()
+        db.session.commit()
+        return resp(res)
+
+
+@auth_bp.route('/update-stock', methods=['GET','POST'])
+def update_stock():
+        param = request_parse(request)
+        index = param.get('index')
+        stocknum = param.get('stocknum')
+        buy_price = param.get('buy_price')
+        profit = param.get('profit')
+        res = db.session.query(AccountStockModel).filter(AccountStockModel.index == index).update(
+            {'stocknum': stocknum, 'buy_price': buy_price, 'profit': profit}
+        )
+        db.session.commit()
+        return resp(res)
+
+
 
 
 ############################################

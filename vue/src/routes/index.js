@@ -112,12 +112,6 @@ const routes = [
     component: () => import('../views/auth/UserMoney.vue'),
   },
 
-    {
-    path: '/stock-add',
-    name: 'StockAdd',
-    component: () => import('../views/stock/StockAdd.vue'),
-  },
-
       {
     path: '/stock-update',
     name: 'StockUpdate',

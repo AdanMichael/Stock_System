@@ -20,13 +20,6 @@
         </a-button>
       </a-col>
 
-      <a-col flex="auto">
-        <a-button type="primary" @click="add_s">
-         添加数据
-        </a-button>
-      </a-col>
-
-
 
        </a-row>
    <!-- 表格数据展示 -->
@@ -299,29 +292,38 @@ export default {
     },
 
 
-    add_s(){
-      this.$alipay_api.add_stock().then((res) => {
-          if (res.code==200){
-            this.$message.success("添加成功")
-          }
-      })
-    },
-
 
     del_s(index){
-      this.$alipay_api.del_stock(index).then((res) => {
-          if (res.code==200){
-            this.$message.success("删除成功")
+      let r=confirm("确认删除吗？");
+			if (r==true){
+        let param={
+        index:index
+        }
+        this.$alipay_api.del_stock(param).then((res) => {
+          if (res){
+            window.alert("已删除")
+            // window.location.reload()
+            this.$router.go(0)
           }
       })
+
+      }
+        else{
+        window.alert("已取消")
+			  }
+
     },
 
     up_s(index){
-      this.$alipay_api.update_stock(index).then((res) => {
-            if (res.code==200){
-            this.$message.success("修改成功")
-          }
-      })
+      // this.$alipay_api.update_stock(index).then((res) => {
+      //       if (res.code==200){
+      //       this.$message.success("修改成功")
+      //     }
+      // })
+      this.$router.push({
+        path: `/stock-update/`, query:{index:index}
+      });
+
     },
 
 

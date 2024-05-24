@@ -35,7 +35,7 @@
           <router-link to="/user-manage">用户信息管理</router-link>
         </a-menu-item>
         <a-menu-item key="/user-money" v-if="user_info.role == 'admin'">
-          <router-link to="/user-money">用户资产管理</router-link>
+          <router-link to="/user-money">用户交易管理</router-link>
         </a-menu-item>
 
 
