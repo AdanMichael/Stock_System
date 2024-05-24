@@ -20,11 +20,7 @@
         </a-button>
       </a-col>
 
-      <a-col flex="auto">
-        <a-button type="primary" @click="">
-         更新数据
-        </a-button>
-      </a-col>
+
 
 
 
@@ -66,17 +62,17 @@
 
         <a-button
           type="danger"
-          @click=""
+          @click="sell(row.index,row.num,row.bp)"
           style="margin-right: 2rem"
           >抛出</a-button
         >
 
-        <a-button
-          type="primary"
-          @click=""
-          style="margin-right: 2rem"
-          >加仓</a-button
-        >
+
+        <a-button type="primary" @click="refresh(row.index,row.dm)">
+         更新数据
+        </a-button>
+
+
       </template>
     </a-table>
 
@@ -289,20 +285,58 @@ export default {
     },
 
 
-
-
-  //   //页面刷新
-  // refresh() {
-  //   this.$router.go(0)
-  // },
   formatProfit(profit) {
           if (profit == undefined) {
               return 0
           }
           return profit
+      },
+
+  //抛出
+    sell(index,num,bp){
+    let r=confirm("确定抛出吗？");
+			if (r==true){
+       let param={
+         uid:this.user_info.id,
+         index:index,
+         stocknum:num,
+         buy_price:bp,
+         sell_price:this.real_data.p,
+
+        }
+      this.$alipay_api.sell(param).then((res) => {
+        if (res.code == 200) {
+          window.alert("已抛出")
+          this.$router.go(0)
+        }
+      })
+
       }
+      else{
+        window.alert("已取消")
+			  }
+
+    },
 
 
+      // 加载实时数据
+        loadRealData(code) {
+            this.loading = true
+            this.$stock_api.get_stock_day(code).then((res) => {
+                console.log(res)
+                if (res.code == 200) {
+                    this.real_data = res.data
+                    this.$message.success('获取数据成功！');
+                } else {
+                    this.$message.error('请求过于频繁,请2秒后刷新页面,重新进行请求!');
+                }
+                this.loading = false
+            })
+        },
+        // 刷新股票实时数据
+        refresh() {
+            this.loadRealData(this.code)
+        }
 
 
 

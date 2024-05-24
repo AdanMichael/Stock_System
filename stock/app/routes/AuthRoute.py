@@ -304,6 +304,20 @@ def update_stock():
         db.session.commit()
         return resp(res)
 
+@auth_bp.route('/sell', methods=['GET','POST'])
+def sell_stock():
+        param = request_parse(request)
+        uid = param.get('uid')
+        index = param.get('index')
+        stocknum = decimal.Decimal(param.get('stocknum'))
+        buy_price =decimal.Decimal( param.get('buy_price'))
+        sell_price =decimal.Decimal( param.get('sell_price'))
+        fee=stocknum*(sell_price-buy_price)
+        user=db.session.query(AccountModel).filter(AccountModel.id ==uid).first()
+        user.rest_asset+=fee
+        db.session.query(AccountStockModel).filter(AccountStockModel.index == index).delete()
+        res=db.session.commit()
+        return resp(res)
 
 
 

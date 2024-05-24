@@ -269,6 +269,11 @@ get_stocks(paramObj){
     },
 
 
+     sell(paramObj) {
+        return get('/auth/sell',paramObj)
+    },
+
+
 
 
 
