@@ -245,8 +245,12 @@ export const alipay_api={
         return get('/auth/buystock',paramObj)
     },
 
-
-
+get_stock(paramObj){
+     return get('/auth/get-stock',paramObj)
+},
+get_stocks(paramObj){
+     return get('/auth/get-stocks',paramObj)
+}
 
 
 }

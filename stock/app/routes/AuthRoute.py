@@ -218,6 +218,34 @@ def buystock():
     else:
         return resp(ResponseEnum.NoMoney_ERROR.value['code'], ResponseEnum.NoMoney_ERROR.value['msg'])
 
+
+
+
+@auth_bp.route('/get-stock', methods=['GET'])
+def get_stock():
+    try:
+        param = request_parse(request)
+        userid=param.get('account_id')
+        search=param.get('search')
+        data = UserService.query_stock(userid,search)
+        return resp(data=data)
+    except Exception as e:
+        print('分页查询用户列表异常 ' + str(e))
+        return resp(ResponseEnum.QUERY_DATABASE_FAIL.value['code'], ResponseEnum.QUERY_DATABASE_FAIL.value['msg'])
+
+
+
+@auth_bp.route('/get-stocks', methods=['GET'])
+def get_stocks():
+    try:
+        param = request_parse(request)
+        userid = param.get('account_id')
+        data = UserService.query_stocks(userid)
+        return resp(data=data)
+    except Exception as e:
+        print('分页查询用户列表异常 ' + str(e))
+        return resp(ResponseEnum.QUERY_DATABASE_FAIL.value['code'], ResponseEnum.QUERY_DATABASE_FAIL.value['msg'])
+
 ############################################
 # 辅助函数
 ############################################
