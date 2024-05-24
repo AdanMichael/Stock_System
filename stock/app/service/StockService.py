@@ -162,11 +162,12 @@ class StockService(object):
 
     @classmethod
     def update_stock_company_by_code(cls, param: []):
-        res=StockModel.query.filter(StockModel.code == param.get("code")).update({'stockname':param.get('stockname'),'jys':param.get('jys'),'name':param.get('name'),
+        res=StockModel.query.filter(StockModel.code == param.get("code")).update(
+            {'stockname':param.get('stockname'),'jys':param.get('jys'),'name':param.get('name'),
         'ename':param.get('ename'),'market':param.get('market') ,'idea':param.get('idea'),'ldate':param.get('ldate'),
         'sprice':param.get('spricr'),'principal':param.get('principal') ,'rdate':param.get('rdate'),'rprice':param.get('rprice') ,
         'instype':param.get('instype'),'organ':param.get('organ'),'phone':param.get('phone'),'site':param.get('site'),
-          'post':param.get('post') ,'addr':param.get('addr'), 'oaddr':param.get('oaddr'),'desc':param.get('desc')                                                                            })
+          'post':param.get('post') ,'addr':param.get('addr'), 'oaddr':param.get('oaddr'),'desc':param.get('desc')  })
         db.session.commit()
         return res
 

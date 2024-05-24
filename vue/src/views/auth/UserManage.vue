@@ -48,6 +48,13 @@
       <template slot="sjh" slot-scope="text">
         <div v-if="text == 'sjh'">手机号</div>
 
+        <template slot="ra" slot-scope="text, row">
+        {{ text }}
+      </template>
+      <template slot="pa" slot-scope="text, row">
+        {{ text }}
+      </template>
+
       </template>
       <!-- 删除 -->
       <template slot="operation" slot-scope="text, row">
@@ -89,7 +96,7 @@ const columns = [
     title: "用户名称",
     dataIndex: "mc",
     key: 'mc',
-    width: "30%",
+    width: "20%",
     scopedSlots: { customRender: "mc" },
   },
   {
@@ -99,6 +106,22 @@ const columns = [
     width: "20%",
     scopedSlots: { customRender: "jys" },
   },
+      {
+    title: "用户资产",
+    dataIndex: "ra",
+    key: 'ra',
+    width: "20%",
+    scopedSlots: { customRender: "ra" },
+  },
+      {
+    title: "盈亏资产",
+    dataIndex: "pa",
+    key: 'pa',
+    width: "20%",
+    scopedSlots: { customRender: "pa" },
+  },
+
+
   {
     title: "操作",
     dataIndex: "operation",
@@ -194,7 +217,9 @@ export default {
               {
                 'mc': res.data.accounts[i]["nickname"],
                 'id': res.data.accounts[i]['id'],
-                'sjh': res.data.accounts[i]['phone']
+                'sjh': res.data.accounts[i]['phone'],
+                'ra': this.formatAsset(res.data.accounts[i]['rest_asset']),
+                'pa': this.formatAsset(res.data.accounts[i]['profit_asset'])
               }
             );
           }
@@ -223,7 +248,9 @@ export default {
                   {
                     'mc': res.data.accounts[i]["nickname"],
                     'id': res.data.accounts[i]['id'],
-                    'sjh': res.data.accounts[i]['phone']
+                    'sjh': res.data.accounts[i]['phone'],
+                    'ra': this.formatAsset(res.data.accounts[i]['rest_asset']),
+                    'pa': this.formatAsset(res.data.accounts[i]['profit_asset'])
                   }
               );
             }
@@ -287,7 +314,12 @@ export default {
       });
     },
 
-
+    formatAsset(restAsset) {
+          if (restAsset == undefined) {
+              return 0.0000
+          }
+          return restAsset
+      }
 
 
     },

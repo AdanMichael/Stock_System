@@ -157,7 +157,7 @@ const columns = [
 
 
 export default {
-  name: "UserMoney",
+  name: "MyStock",
   props: {
     user_info: {
       type: Object,

@@ -84,6 +84,47 @@
           ]"
         />
       </a-form-item>
+      <a-form-item v-bind="formItemLayout">
+        <span slot="label">
+          用户资产&nbsp;
+        </span>
+        <a-input
+          v-decorator="[
+            'rest_asset',
+            {
+              rules: [
+                {
+                  required: false,
+                  message: '请输入修改的用户资产!',
+                  whitespace: true,
+                },
+              ],
+            },
+          ]"
+        />
+      </a-form-item>
+
+    <a-form-item v-bind="formItemLayout">
+        <span slot="label">
+          盈亏资产
+        </span>
+        <a-input
+          v-decorator="[
+            'profit_asset',
+            {
+              rules: [
+                {
+                  required: false,
+                  message: '请输入修改的盈亏资产!',
+                  whitespace: true,
+                },
+              ],
+            },
+          ]"
+        />
+      </a-form-item>
+
+
       <a-form-item>
         <div style="float: right">
          <a @click="to_user_manage"> 返回 </a>
@@ -141,6 +182,8 @@ export default {
             phone: values["phone"],
             password: values["password"],
             nickname: values["nickname"],
+            rest_asset: values["rest_asset"],
+            profit_asset: values["profit_asset"],
           };
           console.log("Received values of form: ", data);
           this.$user_api.update(data).then((res) => {

@@ -71,3 +71,25 @@ class UserService(object):
             result['sum'] = len(result.get('stocks'))
         return result
 
+
+    @classmethod
+    def q_all(cls):
+        result = {'stocks': [], 'sum': 0}
+        stocks = AccountStockModel.query.all()
+        # 转化json格式
+        if stocks is not None:
+            for item in stocks:
+                result['stocks'].append(item.to_json())
+            result['sum'] = len(result.get('stocks'))
+        return result
+
+    @classmethod
+    def q_one(cls,search:str):
+        result = {'stocks': [], 'sum': 0}
+        stocks = AccountStockModel.query.filter(AccountStockModel.stockname==search)
+        # 转化json格式
+        if stocks is not None:
+            for item in stocks:
+                result['stocks'].append(item.to_json())
+            result['sum'] = len(result.get('stocks'))
+        return result

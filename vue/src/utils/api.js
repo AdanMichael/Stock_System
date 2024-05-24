@@ -225,10 +225,12 @@ export const user_api = {
     },
 
     update(paramObj) {
-        return post('/auth/update', paramObj)
+        return post('/auth/update-user', paramObj)
     },
 
 }
+
+
 
 //支付接口
 export const alipay_api={
@@ -250,7 +252,28 @@ get_stock(paramObj){
 },
 get_stocks(paramObj){
      return get('/auth/get-stocks',paramObj)
-}
+},
+
+
+     add_stock(paramObj) {
+        return post('/auth/add-stock', paramObj)
+    },
+     del_stock(paramObj) {
+        return post('/auth/del-stock', paramObj)
+    },
+     update_stock(paramObj) {
+        return post('/auth/update-stock', paramObj)
+    },
+     q_one(paramObj) {
+        return post('/auth/q-one', paramObj)
+    },
+     q_all() {
+        return post('/auth/q-all')
+    },
+
+
+
+
 
 
 }

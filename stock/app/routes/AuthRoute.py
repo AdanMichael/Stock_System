@@ -153,21 +153,31 @@ def delete_user():
         return resp(res)
 
 
-@auth_bp.route('/update', methods=['POST','GET'])
-def update():
-
+@auth_bp.route('/update-user', methods=['POST','GET'])
+def update_user():
         param = request_parse(request)
+        id=param.get('id')
         nname = param.get('nickname')
         phe = param.get('phone')
         pwd = param.get('password')
+        rest_asset = param.get('rest_asset')
+        profit_asset = param.get('profit_asset')
+        if(rest_asset is None):
+            rest_asset=decimal.Decimal(0)
+        else:
+            rest_asset=decimal.Decimal(rest_asset)
+        if (profit_asset is None):
+            profit_asset= decimal.Decimal(0)
+        else:
+            profit_asset = decimal.Decimal(profit_asset)
+
         user = valid_register(param.get('phone'), param.get('password'))
         if user[0]:  # 数据是否合法
-                res = db.session.query(AccountModel).filter(AccountModel.id == param.get('id')).update(
-                    {'nickname':nname,'phone':phe,'password':pwd}
+                res = db.session.query(AccountModel).filter(AccountModel.id ==id ).update(
+                    {'nickname':nname, 'phone':phe, 'password':pwd ,'rest_asset':rest_asset,'profit_asset':profit_asset}
                 )
                 db.session.commit()
                 return resp(res)
-
         else:
             return resp(user[1].value['code'], user[1].value['msg'])
 
@@ -245,6 +255,32 @@ def get_stocks():
     except Exception as e:
         print('分页查询用户列表异常 ' + str(e))
         return resp(ResponseEnum.QUERY_DATABASE_FAIL.value['code'], ResponseEnum.QUERY_DATABASE_FAIL.value['msg'])
+
+
+
+
+@auth_bp.route('/q-all', methods=['POST'])
+def q_all():
+    try:
+        data = UserService.q_all()
+        return resp(data=data)
+    except Exception as e:
+        print('分页查询用户列表异常 ' + str(e))
+        return resp(ResponseEnum.QUERY_DATABASE_FAIL.value['code'], ResponseEnum.QUERY_DATABASE_FAIL.value['msg'])
+
+
+
+@auth_bp.route('/q-one', methods=['GET','POST'])
+def q_one():
+    try:
+        param = request_parse(request)
+        search = param.get('search')
+        data = UserService.q_one(search)
+        return resp(data=data)
+    except Exception as e:
+        print('分页查询用户列表异常 ' + str(e))
+        return resp(ResponseEnum.QUERY_DATABASE_FAIL.value['code'], ResponseEnum.QUERY_DATABASE_FAIL.value['msg'])
+
 
 ############################################
 # 辅助函数
