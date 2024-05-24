@@ -163,11 +163,11 @@ def update_user():
         rest_asset = param.get('rest_asset')
         profit_asset = param.get('profit_asset')
         if(rest_asset is None):
-            rest_asset=decimal.Decimal(0)
+            rest_asset=0
         else:
             rest_asset=decimal.Decimal(rest_asset)
         if (profit_asset is None):
-            profit_asset= decimal.Decimal(0)
+            profit_asset=0
         else:
             profit_asset = decimal.Decimal(profit_asset)
 

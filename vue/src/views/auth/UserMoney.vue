@@ -21,7 +21,7 @@
       </a-col>
 
       <a-col flex="auto">
-        <a-button type="primary" @click="">
+        <a-button type="primary" @click="add_s">
          添加数据
         </a-button>
       </a-col>
@@ -69,16 +69,16 @@
 
         <a-button
           type="danger"
-          @click=""
+          @click="del_s(row.index)"
           style="margin-right: 2rem"
-          >抛出</a-button
+          >删除</a-button
         >
 
         <a-button
           type="primary"
-          @click=""
+          @click="up_s(row.index)"
           style="margin-right: 2rem"
-          >加仓</a-button
+          >修改</a-button
         >
       </template>
     </a-table>
@@ -188,6 +188,8 @@ export default {
       },
       dataSource: [], // 搜索框数据源
       input: "",
+
+
     };
   },
   mounted() {
@@ -297,6 +299,30 @@ export default {
     },
 
 
+    add_s(){
+      this.$alipay_api.add_stock().then((res) => {
+          if (res.code==200){
+            this.$message.success("添加成功")
+          }
+      })
+    },
+
+
+    del_s(index){
+      this.$alipay_api.del_stock(index).then((res) => {
+          if (res.code==200){
+            this.$message.success("删除成功")
+          }
+      })
+    },
+
+    up_s(index){
+      this.$alipay_api.update_stock(index).then((res) => {
+            if (res.code==200){
+            this.$message.success("修改成功")
+          }
+      })
+    },
 
 
   //   //页面刷新
@@ -305,7 +331,7 @@ export default {
   // },
   formatProfit(profit) {
           if (profit == undefined) {
-              return 0
+              return 0.0000
           }
           return profit
       }

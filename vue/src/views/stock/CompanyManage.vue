@@ -36,7 +36,7 @@
       </a-col>
        <a-col flex="auto">
         <a-button type="primary" @click="add_data">
-          添加
+          添加股票
         </a-button>
       </a-col>
 

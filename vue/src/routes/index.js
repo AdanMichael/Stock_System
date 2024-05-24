@@ -100,17 +100,32 @@ const routes = [
     component: () => import('../views/stock/CompanyAdd.vue'),
   },
 
-        {
+    {
     path: '/company-update',
     name: 'CompanyUpdate',
     component: () => import('../views/stock/CompanyUpdate.vue'),
   },
 
-          {
+    {
     path: '/user-money',
     name: 'UserMoney',
     component: () => import('../views/auth/UserMoney.vue'),
   },
+
+    {
+    path: '/stock-add',
+    name: 'StockAdd',
+    component: () => import('../views/stock/StockAdd.vue'),
+  },
+
+      {
+    path: '/stock-update',
+    name: 'StockUpdate',
+    component: () => import('../views/stock/StockUpdate.vue'),
+  },
+
+
+
 
 
 ]
