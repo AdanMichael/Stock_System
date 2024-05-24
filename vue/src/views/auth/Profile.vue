@@ -17,7 +17,7 @@
       <a-form-model-item label="账号（手机）">
         {{ form.phone }}
       </a-form-model-item>
-      <a-form-model-item label="用户资产">
+      <a-form-model-item label="用户资产" v-if="user_info.role==='user'">
         {{ form.restAsset }} ￥
          <el-button
           type="primary"
@@ -31,9 +31,10 @@
           style="margin-right: 2rem"
           >充值</el-button
         >
+      </a-form-model-item>
 
-
-
+      <a-form-model-item label="盈利" v-if="user_info.role==='user'">
+        {{ form.profitAsset }} ￥
       </a-form-model-item>
 
       <a-form-model-item label="身份权限">
@@ -75,6 +76,7 @@ export default {
         password: this.user_info.password,
         role: this.formatRole(this.user_info.role),
         restAsset: this.formatRestAsset(this.user_info.rest_asset),
+        profitAsset: this.formatRestAsset(this.user_info.profit_asset),
       },
     };
   },
