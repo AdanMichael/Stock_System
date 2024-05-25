@@ -201,13 +201,13 @@ export default {
           this.$stock_api.get_stock_day(this.code).then((res) => {
                 if (res.code ==200) {
                     this.real_data = res.data
-                    var param = {
+                    let param = {
                       code_id:this.code ,
                       account_id:this.user_info.id,
                       stockname:this.stockname,
                       stocknum:this.input,
                       buy_price:this.real_data.p,
-                      buy_time:this.real_data.t
+                      // buy_time:this.real_data.t
                       }
                 this.$alipay_api.buystock(param).then((res) => {
                 if (res.code == 200) {

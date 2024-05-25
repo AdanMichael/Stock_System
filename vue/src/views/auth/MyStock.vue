@@ -21,7 +21,7 @@
       </a-col>
     <a-col flex="auto">
        <a-button type="primary" @click="refresh">
-         更新数据
+         更新收益
         </a-button>
     </a-col>
 

@@ -217,10 +217,17 @@ def buystock():
     code_id=param.get('code_id')
     stocknum=decimal.Decimal(param.get('stocknum'))
     stockname=param.get('stockname')
-    buy_time=param.get('buy_time')
+    buy_time=str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
+    last_one = AccountStockModel.query.filter()[-1]
+    if(last_one is None):
+        index=1
+    else:
+        index = int(last_one.index) + 1
+
+
     user = db.session.query(AccountModel).filter(AccountModel.id == account_id).first()
     if user.rest_asset>=(stocknum*buy_price):
-        new=AccountStockModel(stockname=stockname,buy_price=buy_price,account_id=account_id,code_id=code_id,stocknum=stocknum,buy_time=buy_time)
+        new=AccountStockModel(index=index,stockname=stockname,buy_price=buy_price,account_id=account_id,code_id=code_id,stocknum=stocknum,buy_time=buy_time,profit=decimal.Decimal(0))
         db.session.add(new)
         user.rest_asset -= stocknum*buy_price
         db.session.commit()
