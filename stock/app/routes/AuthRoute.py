@@ -221,7 +221,7 @@ def buystock():
     user = db.session.query(AccountModel).filter(AccountModel.id == account_id).first()
     if user.rest_asset>=(stocknum*buy_price):
         new=AccountStockModel(stockname=stockname,buy_price=buy_price,account_id=account_id,code_id=code_id,stocknum=stocknum,buy_time=buy_time)
-        res=db.session.add(new)
+        db.session.add(new)
         user.rest_asset -= stocknum*buy_price
         db.session.commit()
         return resp()
@@ -309,15 +309,35 @@ def sell_stock():
         param = request_parse(request)
         uid = param.get('uid')
         index = param.get('index')
-        stocknum = decimal.Decimal(param.get('stocknum'))
-        buy_price =decimal.Decimal( param.get('buy_price'))
-        sell_price =decimal.Decimal( param.get('sell_price'))
-        fee=stocknum*(sell_price-buy_price)
+        sell_price = decimal.Decimal(param.get('sell_price'))
+        jy = db.session.query(AccountStockModel).filter(AccountStockModel.index == index).first()
+        stocknum = decimal.Decimal(jy.stocknum)
+        buy_price =decimal.Decimal(jy.buy_price)
         user=db.session.query(AccountModel).filter(AccountModel.id ==uid).first()
-        user.rest_asset+=fee
+        if(user.profit_asset is None):
+            user.profit_asset=decimal.Decimal(0)
+        user.profit_asset += stocknum*(sell_price-buy_price)
         db.session.query(AccountStockModel).filter(AccountStockModel.index == index).delete()
         res=db.session.commit()
         return resp(res)
+
+
+@auth_bp.route('/update-profit', methods=['GET','POST'])
+def update_profit():
+        param = request_parse(request)
+        index = param.get('index')
+        now_price =decimal.Decimal( param.get('price'))
+        jy=db.session.query(AccountStockModel).filter(AccountStockModel.index == index).first()
+        b_p=decimal.Decimal(jy.buy_price)
+        s_num=decimal.Decimal(jy.stocknum)
+        profit=(now_price-b_p)*s_num
+        db.session.query(AccountStockModel).filter(AccountStockModel.index == index).update(
+            {'profit': profit}
+        )
+        res=db.session.commit()
+        return resp(res)
+
+
 
 
 

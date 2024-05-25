@@ -19,8 +19,11 @@
           搜索
         </a-button>
       </a-col>
-
-
+    <a-col flex="auto">
+       <a-button type="primary" @click="refresh">
+         更新数据
+        </a-button>
+    </a-col>
 
 
 
@@ -62,15 +65,15 @@
 
         <a-button
           type="danger"
-          @click="sell(row.index,row.num,row.bp)"
+          @click="sell(row.index,row.dm)"
           style="margin-right: 2rem"
           >抛出</a-button
         >
 
-
-        <a-button type="primary" @click="refresh(row.index,row.dm)">
-         更新数据
-        </a-button>
+<!--        <a-button type="primary" @click="cal_profit(row.index,row.dm)">-->
+<!--        <a-button type="primary" @click="cal_profit()">-->
+<!--         更新-->
+<!--        </a-button>-->
 
 
       </template>
@@ -106,7 +109,7 @@ const columns = [
     title: "股票名称",
     dataIndex: "mc",
     key: 'mc',
-    width: "15%",
+    width: "10%",
     scopedSlots: { customRender: "mc" },
   },
   {
@@ -175,7 +178,9 @@ export default {
       dataSource: [], // 搜索框数据源
       input: "",
       userId: this.user_info.id,
-      real_data: {}
+      real_data: {},
+      Index:[],  //这是js，不是python,所以是数组不是列表
+      Code:[]  //这是js，不是python,所以是数组不是列表
     };
   },
   mounted() {
@@ -293,24 +298,26 @@ export default {
       },
 
   //抛出
-    sell(index,num,bp){
+    sell(index,code){
     let r=confirm("确定抛出吗？");
 			if (r==true){
-       let param={
-         uid:this.user_info.id,
-         index:index,
-         stocknum:num,
-         buy_price:bp,
-         sell_price:this.real_data.p,
-
-        }
-      this.$alipay_api.sell(param).then((res) => {
-        if (res.code == 200) {
-          window.alert("已抛出")
-          this.$router.go(0)
-        }
-      })
-
+        this.$stock_api.get_stock_day(code).then((res) => {
+          if (res.code===200){
+          this.real_data = res.data
+                let param={
+                 uid:this.user_info.id,
+                 index:index,
+                 sell_price:this.real_data.p,
+                }
+                console.log(param.sell_price)
+              this.$alipay_api.sell(param).then((res) => {
+                if (res) {
+                  window.alert("已抛出")
+                  this.$router.go(0)
+                }
+              })
+          }
+        })
       }
       else{
         window.alert("已取消")
@@ -319,24 +326,49 @@ export default {
     },
 
 
-      // 加载实时数据
-        loadRealData(code) {
-            this.loading = true
-            this.$stock_api.get_stock_day(code).then((res) => {
-                console.log(res)
-                if (res.code == 200) {
-                    this.real_data = res.data
-                    this.$message.success('获取数据成功！');
+
+
+
+
+     //刷新股票实时数据
+        refresh() {
+            // 遍历data数组
+          this.data.forEach(item => {
+            // 遍历columns数组中的每个列对象
+            this.columns.forEach(column => {
+              // 检查每个列对象是否有dataIndex属性，并且dataIndex等于"dm"
+              if (column.dataIndex === 'index') {
+                // 输出股票代码属性列的值
+                this.Index.push(item[column.dataIndex])
+              }
+              if (column.dataIndex === 'dm') {
+                // 输出股票代码属性列的值
+                this.Code.push(item[column.dataIndex])
+              }
+            });
+          });
+
+          for (let i = 0; i <this.Index.length; i++) {
+            this.$stock_api.get_stock_day(this.Code[i]).then((res) => {
+                if (res.code === 200) {
+                     this.real_data = res.data
+                     let param={
+                     index:this.Index[i],
+                     price:this.real_data.p,
+                    }
+                  this.$alipay_api.update_profit(param).then((res) => {
+                     if (res){console.log("ok")}
+                  })
+
                 } else {
                     this.$message.error('请求过于频繁,请2秒后刷新页面,重新进行请求!');
                 }
-                this.loading = false
             })
+            }
+          window.alert("已更新")
+          this.$router.go(0)
         },
-        // 刷新股票实时数据
-        refresh() {
-            this.loadRealData(this.code)
-        }
+
 
 
 

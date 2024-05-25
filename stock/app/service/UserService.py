@@ -50,7 +50,7 @@ class UserService(object):
     @classmethod
     def query_stock(cls, userid: int,search:str):
         result = {'stocks': [],'sum': 0}
-        stocks = AccountStockModel.query.filter( AccountStockModel.stockname==search and AccountStockModel.account_id==userid).order_by(
+        stocks = AccountStockModel.query.filter( (AccountStockModel.stockname==search or AccountStockModel.index==search )and AccountStockModel.account_id==userid).order_by(
             AccountStockModel.index).all()
         # 转化json格式
         if stocks is not None:

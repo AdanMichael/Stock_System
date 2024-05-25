@@ -268,9 +268,12 @@ get_stocks(paramObj){
         return get('/auth/q-all')
     },
 
-
      sell(paramObj) {
         return get('/auth/sell',paramObj)
+    },
+
+    update_profit(paramObj) {
+        return get('/auth/update-profit',paramObj)
     },
 
 
