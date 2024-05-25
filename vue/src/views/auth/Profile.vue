@@ -33,8 +33,14 @@
         >
       </a-form-model-item>
 
-      <a-form-model-item label="盈利" v-if="user_info.role==='user'">
+      <a-form-model-item label="盈亏" v-if="user_info.role==='user'">
         {{ form.profitAsset }} ￥
+           <el-button
+          type="primary"
+          @click="refresh"
+          style="margin-right: 2rem"
+          >提取</el-button
+        >
       </a-form-model-item>
 
       <a-form-model-item label="身份权限">

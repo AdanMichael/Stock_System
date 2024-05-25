@@ -314,12 +314,19 @@ def sell_stock():
         stocknum = decimal.Decimal(jy.stocknum)
         buy_price =decimal.Decimal(jy.buy_price)
         user=db.session.query(AccountModel).filter(AccountModel.id ==uid).first()
+        fee=stocknum*(sell_price-buy_price)
+        zero=decimal.Decimal(0)
         if(user.profit_asset is None):
-            user.profit_asset=decimal.Decimal(0)
-        user.profit_asset += stocknum*(sell_price-buy_price)
+            user.profit_asset=zero
+        if(fee<zero and abs(fee)>user.profit_asset and abs(fee)<=user.rest_asset):    ##盈亏收入不足时会从用户资产扣
+            user.rest_asset +=fee
+        elif(fee<zero and abs(fee)>user.rest_asset):
+            return resp(ResponseEnum.NoMoney_ERROR.value['code'], ResponseEnum.NoMoney_ERROR.value['msg'])
+        else:
+            user.profit_asset += fee
         db.session.query(AccountStockModel).filter(AccountStockModel.index == index).delete()
-        res=db.session.commit()
-        return resp(res)
+        db.session.commit()
+        return resp()
 
 
 @auth_bp.route('/update-profit', methods=['GET','POST'])
@@ -335,7 +342,7 @@ def update_profit():
             {'profit': profit}
         )
         res=db.session.commit()
-        return resp(res)
+        return resp()
 
 
 

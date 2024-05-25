@@ -311,9 +311,12 @@ export default {
                 }
                 console.log(param.sell_price)
               this.$alipay_api.sell(param).then((res) => {
-                if (res) {
+                if (res.code===200) {
                   window.alert("已抛出")
                   this.$router.go(0)
+                }
+                else if(res.code===1020){
+                  this.$message.error("资产不足以抵消亏损，请及时充值")
                 }
               })
           }
@@ -324,10 +327,6 @@ export default {
 			  }
 
     },
-
-
-
-
 
 
      //刷新股票实时数据
@@ -357,7 +356,7 @@ export default {
                      price:this.real_data.p,
                     }
                   this.$alipay_api.update_profit(param).then((res) => {
-                     if (res){console.log("ok")}
+                     if (res.code===200){console.log("ok")}
                   })
 
                 } else {
