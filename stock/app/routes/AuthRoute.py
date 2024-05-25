@@ -348,9 +348,25 @@ def update_profit():
         db.session.query(AccountStockModel).filter(AccountStockModel.index == index).update(
             {'profit': profit}
         )
-        res=db.session.commit()
+        db.session.commit()
         return resp()
 
+
+@auth_bp.route('/tq', methods=['GET','POST'])
+def tq():
+        param = request_parse(request)
+        uid = param.get('uid')
+        user=db.session.query(AccountModel).filter(AccountModel.id == uid).first()
+        p=user.profit_asset
+        zero=decimal.Decimal(0)
+        if((p is None) or (p is zero)):
+            return resp(ResponseEnum.NoMoney_ERROR.value['code'], ResponseEnum.NoMoney_ERROR.value['msg'])
+        else:
+            user.rest_asset+=p
+            db.session.query(AccountModel).filter(AccountModel.id == uid).update(
+            {'profit_asset':decimal.Decimal(0)})
+            db.session.commit()
+        return resp()
 
 
 

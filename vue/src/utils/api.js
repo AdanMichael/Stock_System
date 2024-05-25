@@ -277,7 +277,9 @@ get_stocks(paramObj){
     },
 
 
-
+ tq(paramObj) {
+        return get('/auth/tq',paramObj)
+    },
 
 
 

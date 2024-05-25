@@ -37,7 +37,7 @@
         {{ form.profitAsset }} ￥
            <el-button
           type="primary"
-          @click="refresh"
+          @click="tq"
           style="margin-right: 2rem"
           >提取</el-button
         >
@@ -90,7 +90,7 @@ export default {
   },
   methods: {
       pay(){
-       var param = {
+       let param = {
         money: this.input,
         id: this.user_info.id
       }
@@ -110,6 +110,21 @@ export default {
         this.$router.go(0)
       },
 
+      tq(){
+         let param = {
+                  uid: this.user_info.id
+                }
+        this.$alipay_api.tq(param).then((res) => {
+          if (res.code===200){
+            this.$message.success("提取成功")
+              this.$router.go(0)
+          }
+          else{
+            this.$message.error("盈亏为0,不能提取到用户资产！")
+          }
+
+      })
+      },
 
       /**
        * 字段转换用户角色名称
