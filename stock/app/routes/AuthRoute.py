@@ -144,6 +144,7 @@ def get_userbyname():
 
 
 
+
 @auth_bp.route('/delete-user', methods=['POST','GET'])
 def delete_user():
         param = request_parse(request)
@@ -151,6 +152,33 @@ def delete_user():
         # db.session.delete(account)
         db.session.commit()
         return resp(res)
+
+@auth_bp.route('/forget', methods=['POST','GET'])
+def forget():
+        param = request_parse(request)
+        phone=param.get('phone')
+        pwd=param.get('password')
+        db.session.query(AccountModel).filter(AccountModel.phone == phone).update(
+            {'password': pwd}
+        )
+        db.session.commit()
+        return resp()
+
+
+@auth_bp.route('/alt', methods=['POST','GET'])
+def alt():
+        param = request_parse(request)
+        phone=param.get('phone')
+        pwd=param.get('password')
+        name=param.get('nickname')
+        id=param.get('id')
+        db.session.query(AccountModel).filter(AccountModel.id == id).update(
+            {'password': pwd,'nickname':name,'phone':phone}
+        )
+        db.session.commit()
+        return resp()
+
+
 
 
 @auth_bp.route('/update-user', methods=['POST','GET'])

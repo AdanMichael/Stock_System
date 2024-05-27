@@ -54,10 +54,10 @@
           记住我
         </a-checkbox>
 <!--    ##########################################    -->
-        <a class="login-form-forgot" href="http://localhost:8080/Register.vue#/register"> 忘记密码 </a>
+        <a class="login-form-forgot" @click="forget"> 忘记密码 </a>
 <!--  ###########################################      -->
         Or
-        <a @click="to_register"> 注册 </a>
+        <a @click="to_register" > 注册 </a>
       </a-form-item>
       <a-form-item>
         <a-button
@@ -80,6 +80,8 @@ export default {
   name: "Login",
   data() {
     return {
+      r: false,
+      f: false,
       loading: false
     };
   },
@@ -122,10 +124,19 @@ export default {
     },
     to_register() {
       // 页面跳转
+      this.r=true
       this.$router.push({
-        path: `/register`,
+        path: `/register`,query:{r:this.r},
       });
     },
+    forget() {
+      // 页面跳转
+      this.f=true
+      this.$router.push({
+        path: `/register`,query:{f:this.f},
+      });
+    },
+
   },
 };
 </script>

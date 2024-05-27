@@ -15,7 +15,7 @@ class AccountModel(db.Model):
     role = db.Column(db.String(5), doc="账户角色", nullable=True)
     create_time = db.Column(db.String(13), doc="注册时间", nullable=True)
     rest_asset=db.Column(db.DECIMAL(10,2), doc="用户资产", nullable=True)
-    profit_asset=db.Column(db.DECIMAL(10,2), doc="获利资产", nullable=True)
+    profit_asset=db.Column(db.DECIMAL(10,2), doc="盈亏资产", nullable=True)
 
     def to_json(self):
         return {

@@ -45,8 +45,18 @@
 
       <a-form-model-item label="身份权限">
         {{ form.role }}
+          <el-button
+          type="primary"
+          @click="alt"
+          style="margin-right: 2rem"
+          >修改个人信息</el-button
+        >
       </a-form-model-item>
+
     </a-form-model>
+
+
+
 
        <el-dialog :visible.sync="showBuy" width=20%>
       <el-form label-width="100px" >
@@ -105,6 +115,12 @@ export default {
           }
       })
       },
+
+    alt(){
+          this.$router.push({
+                path: `/alter`,
+              });
+    },
 
       refresh(){
         this.$router.go(0)

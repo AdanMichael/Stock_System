@@ -228,6 +228,10 @@ export const user_api = {
         return post('/auth/update-user', paramObj)
     },
 
+    alt(paramObj) {
+        return post('/auth/alt', paramObj)
+    },
+
 }
 
 

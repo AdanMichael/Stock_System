@@ -64,6 +64,12 @@ const routes = [
     //   keepAlive: true // 需要缓存
     // }
   },
+    {
+    path: '/alter',
+    name: 'Alter',
+    component: () => import('../views/auth/Alter.vue'),
+  },
+
  {
     path: '/mystock',
     name: 'MyStock',

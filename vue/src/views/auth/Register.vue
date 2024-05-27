@@ -64,7 +64,7 @@
           @blur="handleConfirmBlur"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout">
+      <a-form-item v-bind="formItemLayout" v-if="r">
         <span slot="label">
           昵称&nbsp;
           <a-tooltip title="昵称不可用于登录哦！">
@@ -87,10 +87,14 @@
         />
       </a-form-item>
       <a-form-item>
-        <div style="float: right">
+        <div style="float: right" v-if="r">
           已有账号？<a @click="to_login"> 登录 </a>
         </div>
+        <div style="float: right" v-if="f">
+          <a @click="to_login"> 返回 </a>
+        </div>
       </a-form-item>
+
       <a-form-item>
         <a-button
           type="primary"
@@ -98,10 +102,27 @@
           size="large"
           class="register-form-button"
           :loading="loading"
+          v-if="r"
         >
           注册
         </a-button>
+
+         <a-button
+          type="primary"
+          html-type="submit"
+          size="large"
+          class="register-form-button"
+          :loading="loading"
+          v-if="f"
+        >
+          确认
+        </a-button>
+
       </a-form-item>
+
+
+
+
     </a-form>
   </div>
 
@@ -112,6 +133,8 @@ export default {
   name: "Register",
   data() {
     return {
+      r: this.$route.query.r,
+      f: this.$route.query.f,
       loading: false,
       confirmDirty: false,
       formItemLayout: {
@@ -144,6 +167,8 @@ export default {
             nickname: values["nickname"],
           };
           console.log("Received values of form: ", data);
+
+          if(this.r){
           this.$user_api.register(data).then((res) => {
             // 请求后端数据
             if (res.code == 200) {
@@ -159,6 +184,25 @@ export default {
             this.$message.error('连接到服务器失败')
             this.loading = false
           })
+        }
+          else if (this.f){
+             this.$user_api.forget(data).then((res) => {
+            // 请求后端数据
+            if (res.code == 200) {
+              this.$message.success("操作成功！");
+              this.$router.push({
+                path: `/login`,
+              });
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.loading = false
+          }).catch(() => {
+            this.$message.error('连接到服务器失败')
+            this.loading = false
+          })
+          }
+
         } else {
           this.loading = false
         }
